@@ -6,7 +6,7 @@
   "content_scripts": [
     {
       "matches": ["https://dxheat.com/*","http://localhost/*"],
-      "js": ["jquery.js","content_script.js"]
+      "js": ["content_script.js"]
     }
   ],
   "background":{

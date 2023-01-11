@@ -1,7 +1,9 @@
+var url='http://127.0.0.1:12345/';
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 		if( request.message === "setVfo" ) {
 		setVfo(request.qrg);
+		if ((request.qrg)<7999000) { setMode('LSB'); } else { setMode('USB'); }
 /* 
 			$.xmlrpc({
 				url: 'http://localhost:12345/',
@@ -18,9 +20,18 @@ chrome.runtime.onMessage.addListener(
 function setVfo(qrg) {
    var x;
 	x=fetch(
-	'http://127.0.0.1:12345/',
+	url,
 	{method: 'POST',
 	mode: 'no-cors',
 	body: '<?xml version="1.0"?><methodCall><methodName>main.set_frequency</methodName><params><param><value><double>'+qrg+'</double></value></param></params></methodCall>'
+	});
+}
+function setMode(mode) {
+   var x;
+	x=fetch(
+	url,
+	{method: 'POST',
+	mode: 'no-cors',
+	body: '<?xml version="1.0"?><methodCall><methodName>rig.set_modeA</methodName><params><param><value>'+mode+'</value></param></params></methodCall>'
 	});
 }

@@ -3,7 +3,7 @@
 Quick hack / No warranty :)
 
 Howto:
-* Simply edit "bg.js" an adjust the Port of your flrig instance (Line 21)
+* Simply edit "bg.js" an adjust the Port/URL of your flrig instance (Line 1)
 * Go to Chrome Extensions and turn "Dev Mode" (upper right) on.
 * Point to "Load unpacked extension" (upper left)
 * Choose Folder with Extension (this folder)

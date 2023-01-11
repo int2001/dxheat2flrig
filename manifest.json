@@ -2,18 +2,34 @@
   "name": "DJ7NTs dxheat2flrig",
   "description": "Click on QRG at DXHeat and control ur flrig",
   "version": "1.0",
-  "permissions": ["tabs"],
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
   "content_scripts": [
     {
-      "matches": ["https://dxheat.com/*","http://localhost/*"],
-      "js": ["content_script.js"]
+      "matches": [
+        "https://dxheat.com/*",
+        "http://localhost/*"
+      ],
+      "js": [
+        "content_script.js"
+      ]
     }
   ],
-  "background":{
-  	"service_worker":"bg.js", "type":"module"
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
   },
-  "host_permissions": ["http://localhost/*"],
+  "background": {
+    "service_worker": "bg.js",
+    "type": "module"
+  },
+  "host_permissions": [
+    "http://localhost/*"
+  ],
   "content_security_policy": {
-    "extension_pages": "script-src http://localhost;  object-src http://localhost;"},
+    "extension_pages": "script-src 'self' http://localhost;  object-src http://localhost;"
+  },
   "manifest_version": 3
-} 
+}

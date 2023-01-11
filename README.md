@@ -8,3 +8,5 @@ Howto:
 * Point to "Load unpacked extension" (upper left)
 * Choose Folder with Extension (this folder)
 * Enjoy
+
+### Plugin is under development. If you wish to upgrade simply **remove** the old Version (Chrome / Extensions / Remove) and register the new one

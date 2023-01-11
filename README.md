@@ -2,6 +2,11 @@
 
 Quick hack / No warranty :)
 
+Prerequisites:
+* TRX :)
+* FLRig
+* Chrome/Chromium
+
 Howto:
 * Simply edit "bg.js" an adjust the Port/URL of your flrig instance (Line 1)
 * Go to Chrome Extensions and turn "Dev Mode" (upper right) on.

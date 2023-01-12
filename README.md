@@ -1,5 +1,7 @@
 # Chrome/Chromium-Extension to set the VFO on your Rig with one Click at dxheat.com on the QRG
 
+Now also available as Firefox-Extension. Check "Releases" on the right.
+
 Quick hack / No warranty :)
 
 Prerequisites:

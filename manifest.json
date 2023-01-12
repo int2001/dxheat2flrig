@@ -22,7 +22,14 @@
     "open_in_tab": false
   },
   "background": {
-    "scripts": ["bg.js"]
+    "service_worker": "bg.js",
+    "type": "module"
   },
-    "manifest_version": 2
+  "host_permissions": [
+    "http://localhost/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' http://localhost;  object-src http://localhost;"
+  },
+  "manifest_version": 3
 }

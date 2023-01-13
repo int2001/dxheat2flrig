@@ -12,7 +12,7 @@ document.addEventListener('click', function (event) {
 chrome.runtime.onMessage.addListener(function(req, sender, senderres){
         if(req.name == "cloudlog"){
             if(req.url == window.location.href){
-		console.log('angekommen '+req.call);
+		document.getElementById('callsign').value=req.call;
             }
     	}
 });

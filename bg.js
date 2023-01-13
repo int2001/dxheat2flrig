@@ -1,5 +1,6 @@
 let options = {
-    'flrig-uri': 'http://127.0.0.1:12345/'
+    'flrig-uri': 'http://127.0.0.1:12345/',
+    'cloudlog-uri': 'https://[cloudlog_url]'
 }
 
 loadOptions();
@@ -10,11 +11,19 @@ function loadOptions() {
     }, (items) => {
         options = items.options;
     });
+
+	let details={"id": "content_script",
+	"js": "content_script.js",
+	"matches": [options['cloudlog-uri']]};
+
+const registeredScript = await chrome.contentScripts.register(details);
+
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         switch (request.message) {
             case 'setVfo':
+                setCall(sender,request.call)
                 setVfo(request.qrg);
                 if ((request.qrg) < 7999000) {
                     setMode('LSB');
@@ -25,10 +34,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             case 'loadOptions':
                 loadOptions()
                 break;
-
         }
     }
 );
+
+function setCall(sender,call) {
+	chrome.windows.getAll({populate:true}, (windows) => {
+		windows.forEach((window) => {
+			window.tabs.forEach((tab) => {
+				if (tab.url==options['cloudlog-uri']) {
+					chrome.tabs.sendMessage(tab.id, {"call": call, "name":"cloudlog", "url":options['cloudlog-uri']});
+				}
+			});
+		});
+	});
+}
 
 function setVfo(qrg) {
     fetch(

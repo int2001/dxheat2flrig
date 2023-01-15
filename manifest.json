@@ -10,6 +10,7 @@
     {
       "matches": [
         "https://dxheat.com/*",
+        "https://pota.app/*",
         "http://localhost/*"
       ],
       "js": [

@@ -23,7 +23,7 @@ const registeredScript = await chrome.contentScripts.register(details);
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         switch (request.message) {
             case 'setVfo':
-                setCall(sender,request.call)
+                if (request.call) { setCall(sender,request.call); }
                 setVfo(request.qrg);
                 if ((request.qrg) < 7999000) {
                     setMode('LSB');

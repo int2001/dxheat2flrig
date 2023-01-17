@@ -16,7 +16,7 @@ function loadOptions() {
 	"js": "content_script.js",
 	"matches": [options['cloudlog-uri']]};
 
-const registeredScript = await chrome.contentScripts.register(details);
+// const registeredScript = await chrome.contentScripts.register(details);
 
 }
 
@@ -42,7 +42,7 @@ function setCall(sender,call) {
 	chrome.windows.getAll({populate:true}, (windows) => {
 		windows.forEach((window) => {
 			window.tabs.forEach((tab) => {
-				if (tab.url==options['cloudlog-uri']) {
+				if (tab.url.startsWith(options['cloudlog-uri'])) {
 					chrome.tabs.sendMessage(tab.id, {"call": call, "name":"cloudlog", "url":options['cloudlog-uri']});
 				}
 			});

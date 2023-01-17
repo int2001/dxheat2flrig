@@ -15,7 +15,7 @@ document.addEventListener('click', function (event) {
 
 chrome.runtime.onMessage.addListener(function(req, sender, senderres){
         if(req.name == "cloudlog"){
-            if(req.url == window.location.href){
+            if (window.location.href.startsWith(req.url)) {
 		document.getElementById('callsign').value=req.call;
 		document.getElementById('callsign').dispatchEvent(new Event ('blur'));
             }

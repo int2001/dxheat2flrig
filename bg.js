@@ -1,6 +1,7 @@
 let options = {
     'flrig-uri': 'http://localhost:12345/',
-    'cloudlog-uri': 'https://[cloudlog_url]/index.php/qso?manual=0'
+    'cloudlog-uri': 'https://[cloudlog_url]/index.php/qso?manual=0',
+    'autosync': false
 }
 
 loadOptions();
@@ -33,9 +34,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		}
 		if ((request.call) || (request.call == '')) { 
 			setCall(sender,request.call); 
-			getVfo().then(respi => { 
-				highlightQrg(respi)
-			});
+			flrig2dx();
 		}
 		break;
 		case 'loadOptions':
@@ -102,4 +101,22 @@ function setMode(mode) {
             mode: 'no-cors',
             body: '<?xml version="1.0"?><methodCall><methodName>rig.set_modeA</methodName><params><param><value>' + mode + '</value></param></params></methodCall>'
         });
+}
+
+if (options['autosync']) {
+	chrome.alarms.onAlarm.addListener((alarm) => {
+		if (alarm.name === "syncqrg") {
+			flrig2dx();
+		}
+	});
+
+	chrome.alarms.create('syncqrg', {
+		periodInMinutes: 0.25
+	});
+}
+
+function flrig2dx() {
+	getVfo().then(respi => { 
+		highlightQrg(respi)
+	});
 }

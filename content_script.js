@@ -23,7 +23,9 @@ chrome.runtime.onMessage.addListener(function(req, sender, senderres){
 		}
 	} else if (req.name == "dxhigh") {
 		   if (window.location.href.startsWith("https://dxheat.com")) {
-			   // todo: Parse XML (DOMParser is only in content_js available)
+			   var parser = new DOMParser();
+			   var xmlDoc = parser.parseFromString(req.qrgxml, "text/xml");
+			   var qrgplain = xmlDoc.getElementsByTagName("value")[0].textContent;
 			   // todo: Highlight Row
 		   }
 }

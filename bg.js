@@ -23,12 +23,6 @@ function loadOptions() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	switch (request.message) {
 		case 'setVfo':
-			if ((request.call) || (request.call == '')) { 
-			setCall(sender,request.call); 
-			getVfo().then(respi => { 
-				highlightQrg(respi)
-			});
-		}
 		if (request.qrg) {
 			setVfo(request.qrg);
 			if ((request.qrg) < 7999000) {
@@ -36,6 +30,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			} else {
 				setMode('USB');
 			}
+		}
+		if ((request.call) || (request.call == '')) { 
+			setCall(sender,request.call); 
+			getVfo().then(respi => { 
+				highlightQrg(respi)
+			});
 		}
 		break;
 		case 'loadOptions':

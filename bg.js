@@ -1,6 +1,6 @@
 let options = {
-    'flrig-uri': 'http://127.0.0.1:12345/',
-    'cloudlog-uri': 'https://[cloudlog_url]'
+    'flrig-uri': 'http://localhost:12345/',
+    'cloudlog-uri': 'https://[cloudlog_url]/index.php/qso?manual=0'
 }
 
 loadOptions();
@@ -21,22 +21,40 @@ function loadOptions() {
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        switch (request.message) {
-            case 'setVfo':
-                if (request.call) { setCall(sender,request.call); }
-                setVfo(request.qrg);
-                if ((request.qrg) < 7999000) {
-                    setMode('LSB');
-                } else {
-                    setMode('USB');
-                }
-                break;
-            case 'loadOptions':
-                loadOptions()
-                break;
-        }
-    }
-);
+	switch (request.message) {
+		case 'setVfo':
+			if ((request.call) || (request.call == '')) { 
+			setCall(sender,request.call); 
+			getVfo().then(respi => { 
+				highlightQrg(respi)
+			});
+		}
+		if (request.qrg) {
+			setVfo(request.qrg);
+			if ((request.qrg) < 7999000) {
+				setMode('LSB');
+			} else {
+				setMode('USB');
+			}
+		}
+		break;
+		case 'loadOptions':
+			loadOptions()
+		break;
+	}
+}
+				    );
+function highlightQrg(qrgxml) {
+	chrome.windows.getAll({populate:true}, (windows) => {
+		windows.forEach((window) => {
+			window.tabs.forEach((tab) => {
+				if (tab.url.startsWith('https://dxheat.com')) {
+					chrome.tabs.sendMessage(tab.id, {"qrgxml": qrgxml, "name":"dxhigh", "url":"https://dxheat.com"});
+				}
+			});
+		});
+	});
+}
 
 function setCall(sender,call) {
 	chrome.windows.getAll({populate:true}, (windows) => {
@@ -58,6 +76,22 @@ function setVfo(qrg) {
             mode: 'no-cors',
             body: '<?xml version="1.0"?><methodCall><methodName>main.set_frequency</methodName><params><param><value><double>' + qrg + '</double></value></param></params></methodCall>'
         });
+}
+
+async function getVfo() {
+    const response = await fetch(
+        options['flrig-uri'],
+        {
+            method: 'POST',
+            // mode: 'no-cors',
+			headers: {
+                'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+            },
+            body: '<?xml version="1.0"?><methodCall><methodName>rig.get_vfo</methodName></methodCall>'
+        });
+	const data = await response.text();
+	return data;
 }
 
 function setMode(mode) {

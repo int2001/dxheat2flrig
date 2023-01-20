@@ -11,7 +11,9 @@
       "matches": [
         "https://dxheat.com/*",
         "https://pota.app/*",
-        "http://localhost/*"
+        "https://[cloudlog_url]",
+        "http://localhost/:*",
+        "http://127.0.0.1/:*"
       ],
       "js": [
         "content_script.js"

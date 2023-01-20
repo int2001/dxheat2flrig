@@ -5,6 +5,8 @@ document.addEventListener('click', function (event) {
 		event.preventDefault();
 		let qrg = event.target.innerText.replace(/[\s|,]/g, '') * 100;
 		chrome.runtime.sendMessage({"message": "setVfo", "qrg": qrg, "call":call});
+	} else if (event.target.matches('.header_frequency')) { 
+		chrome.runtime.sendMessage({"message": "setVfo", "call": ""});
 	} else if (event.target.innerText.match(/.*kHz.*/g)) {
 		let qrg=event.target.innerText.replace(/(\d+).*$/g,"$1")*1000;
 		chrome.runtime.sendMessage({"message": "setVfo", "qrg": qrg});
@@ -14,10 +16,16 @@ document.addEventListener('click', function (event) {
 }, false);
 
 chrome.runtime.onMessage.addListener(function(req, sender, senderres){
-        if(req.name == "cloudlog"){
-            if (window.location.href.startsWith(req.url)) {
-		document.getElementById('callsign').value=req.call;
-		document.getElementById('callsign').dispatchEvent(new Event ('blur'));
-            }
-    	}
+	if(req.name == "cloudlog"){
+		if (window.location.href.startsWith(req.url)) {
+			document.getElementById('callsign').value=req.call;
+			document.getElementById('callsign').dispatchEvent(new Event ('blur'));
+		}
+	} else if (req.name == "dxhigh") {
+		   if (window.location.href.startsWith("https://dxheat.com")) {
+			   // todo: Parse XML (DOMParser is only in content_js available)
+			   // todo: Highlight Row
+		   }
+}
 });
+

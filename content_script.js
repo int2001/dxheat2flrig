@@ -9,7 +9,9 @@ document.addEventListener('click', function (event) {
 		chrome.runtime.sendMessage({"message": "setVfo", "call": ""});
 	} else if (event.target.innerText.match(/.*kHz.*/g)) {
 		let qrg=event.target.innerText.replace(/(\d+).*$/g,"$1")*1000;
-		chrome.runtime.sendMessage({"message": "setVfo", "qrg": qrg});
+		let call=event.target.parentElement.parentElement.parentElement.children[0].innerText;
+		call=call.replace(/^\ ([A-Z0-9\/]*)\ .*/g,"$1");
+		chrome.runtime.sendMessage({"message": "setVfo", "qrg": qrg, "call": call});
 	} else {
 		return;
 	}
@@ -43,4 +45,3 @@ chrome.runtime.onMessage.addListener(function(req, sender, senderres){
 		   }
 }
 });
-

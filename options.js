@@ -26,7 +26,9 @@ function saveOptions() {
 
 function restoreOptions() {
     let defaultOptions = {
-        'flrig-uri': 'http://127.0.0.1:12345/'
+        'flrig-uri': 'http://127.0.0.1:12345/',
+        'digi-mode': 'DATA-U',
+        'cw-mode': 'CW-L'
     }
 
     chrome.storage.sync.get({

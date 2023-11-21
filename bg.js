@@ -17,8 +17,6 @@ function loadOptions() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         switch (request.message) {
             case 'setVfo':
-                setVfo(request.qrg);
-
                 if ((request.mode) == 'CW') {
                     setMode(options['cw-mode'])
                 } else if ((request.mode) == 'DIGITAL') {
@@ -26,6 +24,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 } else {
                     setMode(request.mode)
                 }
+                
+                setVfo(request.qrg);
                 break;
             case 'loadOptions':
                 loadOptions()

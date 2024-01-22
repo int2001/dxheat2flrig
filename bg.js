@@ -1,5 +1,7 @@
 let options = {
-    'flrig-uri': 'http://127.0.0.1:12345/'
+    'flrig-uri': 'http://127.0.0.1:12345/',
+    'digi-mode': 'DATA-U',
+    'cw-mode': 'CW-L'
 }
 
 loadOptions();
@@ -15,12 +17,15 @@ function loadOptions() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         switch (request.message) {
             case 'setVfo':
-                setVfo(request.qrg);
-                if ((request.qrg) < 7999000) {
-                    setMode('LSB');
+                if ((request.mode) == 'CW') {
+                    setMode(options['cw-mode'])
+                } else if ((request.mode) == 'DIGITAL') {
+                    setMode(options['digi-mode'])
                 } else {
-                    setMode('USB');
+                    setMode(request.mode)
                 }
+                
+                setVfo(request.qrg);
                 break;
             case 'loadOptions':
                 loadOptions()

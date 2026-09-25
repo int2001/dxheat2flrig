@@ -7,14 +7,17 @@ const defaults = {
 const getOptions = () =>
     new Promise(res => chrome.storage.sync.get({ options: defaults }, res));
 
+const DIGI_MODES = new Set(['DIGITAL', 'DATA', 'FT8', 'FT4', 'JS8', 'JT65', 'JT9', 'PSK31', 'MFSK', 'OLIVIA', 'DSTAR', 'FREEDV', 'PACKET', 'RTTY']);
+
 chrome.runtime.onMessage.addListener(async (request) => {
     const options = (await getOptions()).options;
+    const mode = (request.mode || '').toUpperCase();
     try {
-        if (request.mode == 'CW') {
+        if (mode === 'CW') {
             await setMode(options['cw-mode'], options);
-        } else if (request.mode == 'DIGITAL') {
+        } else if (DIGI_MODES.has(mode)) {
             await setMode(options['digi-mode'], options);
-        } else {
+        } else if (mode) {
             await setMode(request.mode, options);
         }
         await setVfo(request.qrg, options);

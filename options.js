@@ -15,11 +15,6 @@ function saveOptions() {
         setTimeout(function () {
             statusElement.classList.add('d-none');
         }, 750);
-
-
-        chrome.runtime.sendMessage({"message": "loadOptions"});
-
-
     })
 
 }

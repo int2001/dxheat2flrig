@@ -3,14 +3,12 @@
   "description": "Click on QRG at DXHeat and control ur flrig",
   "version": "1.0",
   "permissions": [
-    "tabs",
     "storage"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://dxheat.com/*",
-        "http://localhost/*"
+        "https://dxheat.com/*"
       ],
       "js": [
         "content_script.js"
@@ -22,14 +20,11 @@
     "open_in_tab": false
   },
   "background": {
-    "service_worker": "bg.js",
-    "type": "module"
+    "service_worker": "bg.js"
   },
   "host_permissions": [
+    "http://127.0.0.1/*",
     "http://localhost/*"
   ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self' http://localhost;  object-src http://localhost;"
-  },
   "manifest_version": 3
 }

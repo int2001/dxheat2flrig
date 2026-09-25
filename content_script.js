@@ -3,13 +3,15 @@ document.addEventListener('click', function (event) {
     if (!event.target.matches('.frequency')) return;
 
     event.preventDefault();
-    let qrg = event.target.innerText.replace(/[\s|,]/g, '') * 100;
-    let row = event.target.closest('tr');
-    let mode = row.querySelector('.mode.hidden').innerText;
-    let band = row.querySelector('.band.hidden').innerText;
+    const qrg = Number(event.target.innerText.replace(/[^\d]/g, '')) * 100;
+    if (!Number.isFinite(qrg) || qrg <= 0) return;
 
-    // Now you have both the frequency (qrg) and the mode values
-    console.log("Frequency: ", qrg, " (", band, "m), Mode: ", mode);
-    chrome.runtime.sendMessage({"message": "setVfo", "qrg": qrg, "mode": mode, "band": band});
+    const row = event.target.closest('tr');
+    const modeEl = row && row.querySelector('.mode.hidden');
+    const bandEl = row && row.querySelector('.band.hidden');
+    if (!modeEl || !bandEl) return;
+
+    console.log("Frequency: ", qrg, " (", bandEl.innerText, "m), Mode: ", modeEl.innerText);
+    chrome.runtime.sendMessage({"message": "setVfo", "qrg": qrg, "mode": modeEl.innerText, "band": bandEl.innerText});
 
 }, false);

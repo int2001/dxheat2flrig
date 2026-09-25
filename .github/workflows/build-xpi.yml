@@ -1,0 +1,35 @@
+name: Build XPI
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["V*", "v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Firefox manifest transform
+        run: |
+          jq '.background = {scripts: [.background.service_worker]}' manifest.json > m.json && mv m.json manifest.json
+
+      - name: Build
+        run: |
+          TAG="${GITHUB_REF_NAME:-dev}"
+          zip -r "dxheat2flrig-$TAG.xpi" . -x "*.git*"
+          unzip -l "dxheat2flrig-$TAG.xpi" | grep -q " manifest.json"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dxheat2flrig-xpi
+          path: "*.xpi"
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.xpi"
